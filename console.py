@@ -157,15 +157,16 @@ class HBNBCommand(cmd.Cmd):
                 if ((v.isnumeric()) or (v[0] == '-' and v[1:].isnumeric())):
                     val = int(v)
                     params.update({k: val})
-                else:  
+                elif "." in v:  
                     try: # check if 'v' is float
-                        if ("." in v):
-                            val = float(v)
-                            params.update({k: val})
-                    except Exception as e: # v is a string 
-                        val = v.replace("_", " ")
+                        val = float(v)
                         params.update({k: val})
-
+                    except Exception as e:
+                        pass # v is pure a string
+                else:
+                    val = v.replace("_", " ")
+                    params.update({k: val})
+        
         # create the valid specify class instance
         new_instance = HBNBCommand.classes[cls_type]()
         # storage.new(new_instance) of filestorage has been called 
