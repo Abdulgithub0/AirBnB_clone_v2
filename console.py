@@ -36,8 +36,8 @@ class HBNBCommand(cmd.Cmd):
             print('(hbnb)')
 
     def precmd(self, line):
-        """Reformat command line for advanced command syntax.
-
+        """
+        Reformat command line for advanced command syntax.
         Usage: <class name>.<command>([<id> [<*args> or <**kwargs>]])
         (Brackets denote optional fields in usage example.)
         """
@@ -112,15 +112,27 @@ class HBNBCommand(cmd.Cmd):
     def emptyline(self):
         """ Overrides the emptyline method of CMD """
         pass
+    """
+    @staticmethod
+    def fix_double_quote(string: str) -> str:
 
+        handle str params with redundant single or
+        double quotation
+    
+        tup = (34, 39)
+        if (ord(string[0]) in tup and ord(string[-1]) in tup):
+                    return string[1:-1]
+        return string
+    """
     def do_create(self, args):
         """ Create an object of any class"""
         if not args:
             print("** class name missing **")
             return
         else: 
-        # state of task 2 new features to do_create cmd
+        # start of task 2 new features to do_create cmd
             #separate substring of args into list
+            args = args.replace('"', '') #remove all "
             split_args = args.split()
             cls_type = split_args[0]
             if cls_type not in HBNBCommand.classes:
@@ -153,7 +165,7 @@ class HBNBCommand(cmd.Cmd):
                     except Exception as e: # v is a string 
                         val = v.replace("_", " ")
                         params.update({k: val})
-        
+
         # create the valid specify class instance
         new_instance = HBNBCommand.classes[cls_type]()
         # storage.new(new_instance) of filestorage has been called 
@@ -161,11 +173,9 @@ class HBNBCommand(cmd.Cmd):
         
         # saving the new_instance to json file - serialization
         if (params):
-            for k, v in params.items():
-                setattr(new_instance, k, v)
+            new_instance.__dict__.update(params)
         storage.save()
         print(new_instance.id)
-
 
     def help_create(self):
         """ Help information for the create method """
