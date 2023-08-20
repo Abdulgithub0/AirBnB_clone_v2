@@ -73,8 +73,8 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
-                            and type(eval(pline)) is dict:
+                    if pline[0] == '{' and pline[-1]  == '}'\
+                            and type(eval(pline)) == dict:
                         _args = pline
                     else:
                         _args = pline.replace(',', '')
@@ -118,13 +118,54 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args]()
+        else: 
+        # state of task 2 new features to do_create cmd
+            #separate substring of args into list
+            split_args = args.split()
+            cls_type = split_args[0]
+            if cls_type not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+                return
+
+        # check for the present of params: <key=values>
+        params = None
+        if (len(split_args) > 1):
+            args = split_args[1:]
+
+            # get all params that fit requirements
+            params = filter(lambda x: '=' in x, args)
+
+            # convert each valid params to proper key:value
+            k_v = {e.split("=")[0]: e.split("=")[1] for e in params}
+            params = dict(k_v)
+
+            # replace ", _, and also check for type of the values
+            for k, v in params.items():
+                #check if 'v' is positve Int and cast
+                if ((v.isnumeric()) or (v[0] == '-' and v[1:].isnumeric())):
+                    val = int(v)
+                    params.update({k: val})
+                else:  
+                    try: # check if 'v' is float
+                        if ("." in v):
+                            val = float(v)
+                            params.update({k: val})
+                    except Exception as e: # v is a string 
+                        val = v.replace("_", " ")
+                        params.update({k: val})
+        
+        # create the valid specify class instance
+        new_instance = HBNBCommand.classes[cls_type]()
+        # storage.new(new_instance) of filestorage has been called 
+        # on new_instance during its construction by __init__ method
+        
+        # saving the new_instance to json file - serialization
+        if (params):
+            for k, v in params.items():
+                setattr(new_instance, k, v)
         storage.save()
         print(new_instance.id)
-        storage.save()
+
 
     def help_create(self):
         """ Help information for the create method """
@@ -272,7 +313,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -280,10 +321,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
