@@ -129,15 +129,15 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
-        else: 
+
         # start of task 2 new features to do_create cmd
-            #separate substring of args into list
-            args = args.replace('"', '') #remove all "
-            split_args = args.split()
-            cls_type = split_args[0]
-            if cls_type not in HBNBCommand.classes:
-                print("** class doesn't exist **")
-                return
+        # separate substring of args into list
+        args = args.replace('"', '') #remove all "
+        split_args = args.split()
+        cls_type = split_args[0]
+        if cls_type not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+            return
 
         # check for the present of params: <key=values>
         params = None
