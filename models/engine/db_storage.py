@@ -19,7 +19,7 @@ p = getenv("HBNB_MYSQL_PWD")
 db = getenv("HBNB_MYSQL_DB")
 h = getenv("HBNB_MYSQL_HOST") + ":3306"
 ser = "mysql+mysqldb"
-classes = (City, State, User, Place)
+classes = (City, State, User, Place, Review)
 
 class DBStorage:
     """contain all attrs and methods definition for db storage type"""
