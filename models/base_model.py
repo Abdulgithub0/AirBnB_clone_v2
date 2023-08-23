@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, String, Integer, DateTime
-
+from os import getenv
 Base = declarative_base()
 
 
@@ -13,11 +13,12 @@ class BaseModel:
 
     # Task 6: add new class attrs that will used for db storage only
     id = Column(String(60), primary_key=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
-    updated_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
+    created_at = Column(DateTime(), default=datetime.utcnow(), nullable=False)
+    updated_at = Column(DateTime(), default=datetime.utcnow(), nullable=False)
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
+
         if not kwargs:
             # from models import storage cancel out by task 6
             self.id = str(uuid.uuid4())
@@ -25,11 +26,17 @@ class BaseModel:
             self.updated_at = datetime.now()
             # storage.new(self) this got cancelled out --> by task 6
         else:
-            kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
+            if ("updated_at", 'created_at') in kwargs.keys():
+                kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
-            kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
+                kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
-            del kwargs['__class__']
+            else:
+                kwargs['created_at'] = datetime.now()
+                kwargs['updated_at'] = datetime.now()
+                kwargs['id'] = str(uuid.uuid4())
+            if '__class__' in kwargs.keys():
+                del kwargs['__class__']
             self.__dict__.update(kwargs)
 
     def __str__(self):
