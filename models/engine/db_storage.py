@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from models.amenity import Amenity
 from models.city import City
 from models.state import State
-from models.place import Place
+from models.place import Place, place_amenity
 from models.review import Review
 from models.user import User
 from sqlalchemy.orm.scoping import scoped_session
@@ -19,7 +19,7 @@ p = getenv("HBNB_MYSQL_PWD")
 db = getenv("HBNB_MYSQL_DB")
 h = getenv("HBNB_MYSQL_HOST") + ":3306"
 ser = "mysql+mysqldb"
-classes = (City, State, User, Place, Review)
+classes = (City, State, User, Place, Review, Amenity, place_amenity)
 
 class DBStorage:
     """contain all attrs and methods definition for db storage type"""

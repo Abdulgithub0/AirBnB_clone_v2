@@ -2,8 +2,17 @@
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
 from os import getenv
-from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
+
+# declaring table in sqlalchemy expression syntax to represent many-many
+metadata = Base.metadata
+place_amenity = Table("place_amenity", metadata,
+                      Column("place_id", String(60), ForeignKey("places.id"), nullable=False, primary_key=True),
+                      Column("amenity_id", String(60), ForeignKey("amenities.id"), primary_key=True, nullable=False)
+        )
+
+
 
 class Place(BaseModel, Base):
     """ A place to stay for ever """
@@ -22,6 +31,7 @@ class Place(BaseModel, Base):
         cities = relationship("City", back_populates="places", cascade="all, delete")
         user = relationship("User", back_populates="places", cascade="all, delete")
         reviews = relationship("Review", back_populates="place", cascade="all, delete-orphan")
+        amenities = relationship("Amenity", secondary=place_amenity, viewonly=False, back_populates="place_amenities")
     else:
         city_id = ""
         user_id = ""
@@ -48,3 +58,22 @@ class Place(BaseModel, Base):
                 if self.id == review.place_id:
                     same_id.append(review)
             return same_id
+
+        @property
+        def amenities(self):
+            """
+            Returns the list of Amenity instances based on the attribute
+            amenity_ids that contains all Amenity.id linked to the Place
+            """
+            from models import storage
+            am_instan = storage(Amenity).values()
+            return (list(filter(lambda am: am.id in self.amenity_ids, am_instan)))
+        @amenities.setter
+        def amenities(self, obj):
+            """
+            Setter attribute amenities that handles append method for
+            adding an Amenity.id to the attribute amenity_ids.
+            """
+            if (obj["__class__"] == "Amenity"):
+                self.amenity_ids.append(obj.id)
+                
