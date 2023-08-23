@@ -32,6 +32,7 @@ class BaseModel:
                 kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
             else:
+                # for db engine objects
                 kwargs['created_at'] = datetime.now()
                 kwargs['updated_at'] = datetime.now()
                 kwargs['id'] = str(uuid.uuid4())
