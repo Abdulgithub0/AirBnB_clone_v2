@@ -53,8 +53,8 @@ sudo chown -R ubuntu:ubuntu /data/
 
 content=$(cat <<EOF
 server {
-	listen 8000 default_server;
-	listen [::]:8000 default_server;
+	listen 80 default_server;
+	listen [::]:80 default_server;
 	add_header X-Served-By $HOSTNAME;
 	
 	root /var/www/html;
