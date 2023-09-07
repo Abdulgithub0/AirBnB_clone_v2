@@ -1,13 +1,14 @@
 #!/usr/bin/python3
 """This module instantiates an object of class FileStorage"""
 from os import getenv
+s_type = getenv("HBNB_TYPE_STORAGE")
 
-if (getenv("HBNB_TYPE_STORAGE") == "db"):
-        from models.engine import db_storage
-        storage = db_storage.DBStorage()
-        # storage.type = "db" -->got circular import issues
+if (s_type == "db"):
+        from models.engine.db_storage import DBStorage
+        storage = DBStorage()
+        type_s = "db" #-->got circular import issues
 else:
-    from models.engine import file_storage
-    storage = file_storage.FileStorage()
+    from models.engine.file_storage import FileStorage
+    storage = FileStorage()
     # storage.type = "file"
 storage.reload()

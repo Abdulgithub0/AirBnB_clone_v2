@@ -14,11 +14,16 @@ from models.user import User
 from sqlalchemy.orm.scoping import scoped_session
 
 # needed details to create the engine --> separation of concerns principle
-u = getenv("HBNB_MYSQL_USER")
-p = getenv("HBNB_MYSQL_PWD")
-db = getenv("HBNB_MYSQL_DB")
-h = getenv("HBNB_MYSQL_HOST") + ":3306"
-ser = "mysql+mysqldb"
+if (getenv("HBNB_TYPE_STORAGE") == "db"):
+    u = getenv("HBNB_MYSQL_USER")
+    p = getenv("HBNB_MYSQL_PWD")
+    db = getenv("HBNB_MYSQL_DB")
+    h = getenv("HBNB_MYSQL_HOST") + ":3306"
+    ser = "mysql+mysqldb"
+else:
+    return
+
+
 classes = (City, State, User, Place, Review, Amenity, place_amenity)
 
 class DBStorage:
@@ -43,23 +48,24 @@ class DBStorage:
         """return  all objs in current database session"""
 
         objects = {}
-        if (cls and cls in classes): # check if cls exist and in list of classes or return every instances in db
+        if not (cls) and cls in classes: # check if cls exist and in list of classes or return every instances in db
             rows = self.__session.query(cls).all() # get all instances of the Class
             for row in rows:
-                key = f"{row['__class__']}.{row['id']}" # create the key reference to each instance
+                key = f'{type(row).__name__}.{row["id"]}' # create the key reference to each instance
                 objects[key] = row
             return objects
-        for cls in classes:
-            rows = self.__session.query(cls).all()
-            for row in rows:
-                key = f"{type(row).__name__}.{row.id}"
-                objects[key] = row
+        for cl in classes:
+            rws = self.__session.query(cl).all()
+            for rw in rws:
+                key = f'{type(rw).__name__}.rw.id'
+                objects[key] = rw
         return objects
-    
+
     def new(self, obj):
         """add obj to the current database session"""
         if (obj):
             self.__session.add(obj)
+            self.__session.flush()
 
     def save(self):
         """commit all changes of the current database session"""
