@@ -22,13 +22,11 @@ if [ ! -f "/data/web_static/releases/test/index.html" ]; then
 fi
 
 fake_content=$(cat <<EOF
-<!DOCTYPE html>
 <html>
 	<head>
-		<title>fake html</title>
 	</head>
 	<body>
-		<h1>Hello World from fake html</h1>
+	Holberton School
 	</body>
 </html>
 EOF
@@ -80,5 +78,5 @@ server {
 EOF
 )
 
-echo "$content" | sudo tee /etc/nginx/sites-enabled/default >/dev/null
+echo "$content" | sudo tee "/etc/nginx/sites-enabled/default" >/dev/null
 sudo service nginx restart
