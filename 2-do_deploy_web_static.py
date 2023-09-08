@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """
 A Fabric script (based on the file 2-do_deploy_web_static.py)
 that distributes an archive to your web servers
