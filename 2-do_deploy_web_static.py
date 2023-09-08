@@ -17,7 +17,7 @@ def do_deploy(archive_path):
             put(archive_path, "/tmp/")
             releases = "/data/web_static/releases/" + file_name[:-4]
             sudo("mkdir -p {}".format(releases))
-            sudo("tar -xzvf /tmp/{} -C {}/".format(file_name, releases))
+            sudo("tar -xzf /tmp/{} -C {}/".format(file_name, releases))
             sudo("rm /tmp/{}".format(file_name))
             # relocate files location to allow easy aliasing by nginx
             sudo("mv {}/web_static/* {}".format(releases, releases))
