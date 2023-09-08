@@ -34,7 +34,6 @@ def do_deploy(archive_path):
         sudo("rm -rf {}/web_static".format(releases))
         # Check if the symbolic link exists before removing it
         sudo("rm -rf /data/web_static/current")
-        # sudo("mkdir -p /data/web_static && touch /data/web_static/current")
         # Create a new symbolic link
         sudo("ln -sf {}/ /data/web_static/current".format(releases))
         print("...All the Files have been deployed successfully...")
