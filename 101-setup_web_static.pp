@@ -14,10 +14,9 @@
 		command  => 'sudo mkdir -p /data/web_static/{releases,shared/test}/',
 	} ->
 
-	exec {'create index.html':
-		provider => 'shell',
-		command  => 'sudo touch /data/web_static/releases/test/index.html',
-		unless   => 'test -e /data/web_static/releases/test/index.html',
+	file {'create index.html':
+		ensure   => 'file',
+		path     => '/data/web_static/releases/test/index.html',
 		content  => '<html>\n  <head>\n  </head>\n  <body>\n    Holberton School\n  </body>\n</html>',
 	} ->
 
@@ -44,7 +43,7 @@
 		server {
 			listen 80 default_server;
 			listen [::]:80 default_server;
-			add_header X-Served-By ${HOSTNAME};
+			add_header X-Served-By $hostname;
 	
 			root /var/www/html;
 			index index.html;
