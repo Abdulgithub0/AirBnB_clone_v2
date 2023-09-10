@@ -9,15 +9,35 @@ package {'nginx':
 	ensure   => 'installed',
 } ->
 
-exec {'create folders':
-	provider => 'shell',
-	command  => 'sudo mkdir -p /data/web_static/{releases,shared/test}/',
+# exec {'create folders':
+#	provider => 'shell',
+#	command  => 'sudo mkdir -p /data/web_static/{shared,releases/test}',
+#}->
+
+file { '/data':
+  ensure => 'directory',
 } ->
 
-file {'create index.html':
+file { '/data/web_static':
+  	ensure => 'directory',
+} ->
+
+file { '/data/web_static/releases':
+  	ensure => 'directory',
+} ->
+
+file { '/data/web_static/shared':
+  	ensure => 'directory',
+} ->
+
+file {'/data/web_static/releases/test':
+	ensure => 'directory',
+} ->
+
+file {'create index':
 	ensure   => 'file',
 	path     => '/data/web_static/releases/test/index.html',
-	content  => @(EOF)
+	content  =>@(EOF)
 <html>
 	<head>
 	</head>
@@ -25,7 +45,7 @@ file {'create index.html':
 		Holberton School
 	</body>
 </html>
-	EOF
+EOF
 } ->
 
 exec {'delete old symlink':
@@ -47,7 +67,7 @@ exec {'grant ownership':
 file {'update nginx file':
 	ensure  => 'link',
 	path    => '/etc/nginx/sites-enabled/default',
-	content => @(EOF)
+	content =>@(EOF)
 server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
