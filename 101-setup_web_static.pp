@@ -17,7 +17,14 @@
 	file {'create index.html':
 		ensure   => 'file',
 		path     => '/data/web_static/releases/test/index.html',
-		content  => '<html>\n  <head>\n  </head>\n  <body>\n    Holberton School\n  </body>\n</html>',
+		content  => "<html>
+		 <head>
+		 </head>
+		 <body>
+			Holberton School
+		 </body>
+		</html>
+		",
 	} ->
 
 	exec {'delete old symlink':
@@ -70,7 +77,9 @@
 	
 	service {'nginx':
 		ensure     => 'running',
-		enable     => 'true',
-		hasstatus  => 'true',
-		hasrestart => 'true',
-	}	
+	} ->
+	
+	exec {'restart nginx':
+		provider => 'shell',
+		command  => 'sudo service nginx restart',
+	}
