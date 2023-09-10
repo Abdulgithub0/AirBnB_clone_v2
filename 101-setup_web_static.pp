@@ -1,4 +1,4 @@
-# a puppet script that sets up web servers for the deployment of web_static
+# puppet script that sets up web servers for the deployment of web_static
 exec {'update system':
 	provider => 'shell',
 	command  => 'sudo apt-get update',
