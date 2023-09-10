@@ -37,7 +37,7 @@
 	} ->
 
 	file {'update nginx file':
-		ensure  => 'present',
+		ensure  => 'link',
 		path    => '/etc/nginx/sites-enabled/default',
 		content => "
 		server {
