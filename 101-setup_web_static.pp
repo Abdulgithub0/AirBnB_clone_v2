@@ -1,85 +1,86 @@
 # a puppet script that sets up web servers for the deployment of web_static
-	exec {'update system':
-		provider => 'shell',
-		command  => 'sudo apt-get update',
-	} ->
+exec {'update system':
+	provider => 'shell',
+	command  => 'sudo apt-get update',
+} ->
 	
-	package {'nginx':
-		provider => 'apt',
-		ensure   => 'installed',
-	} ->
+package {'nginx':
+	provider => 'apt',
+	ensure   => 'installed',
+} ->
 
-	exec {'create folders':
-		provider => 'shell',
-		command  => 'sudo mkdir -p /data/web_static/{releases,shared/test}/',
-	} ->
+exec {'create folders':
+	provider => 'shell',
+	command  => 'sudo mkdir -p /data/web_static/{releases,shared/test}/',
+} ->
 
-	file {'create index.html':
-		ensure   => 'file',
-		path     => '/data/web_static/releases/test/index.html',
-		content  => "<html>
-		 <head>
-		 </head>
-		 <body>
-			Holberton School
-		 </body>
-		</html>
-		",
-	} ->
+file {'create index.html':
+	ensure   => 'file',
+	path     => '/data/web_static/releases/test/index.html',
+	content  => @(EOF)
+<html>
+	<head>
+	</head>
+	<body>
+		Holberton School
+	</body>
+</html>
+	EOF
+} ->
 
-	exec {'delete old symlink':
-		provider => 'shell',
-		command  => 'sudo rm -rf /data/web_static/current',
-		unless   => 'test ! -e /data/web_static/current',
-	} ->
+exec {'delete old symlink':
+	provider => 'shell',
+	command  => 'sudo rm -rf /data/web_static/current',
+	unless   => 'test ! -e /data/web_static/current',
+} ->
 	
-	exec {'create new symlink':
-		provider => 'shell',
-		command  => 'sudo ln -sf /data/web_static/releases/test /data/web_static/current',
-	} ->
+exec {'create new symlink':
+	provider => 'shell',
+	command  => 'sudo ln -sf /data/web_static/releases/test /data/web_static/current',
+} ->
 
-	exec {'grant ownership':
-		provider => 'shell',
-		command  => 'sudo chown -R ubuntu:ubuntu /data/',
-	} ->
+exec {'grant ownership':
+	provider => 'shell',
+	command  => 'sudo chown -R ubuntu:ubuntu /data/',
+} ->
 
-	file {'update nginx file':
-		ensure  => 'link',
-		path    => '/etc/nginx/sites-enabled/default',
-		content => "
-		server {
-			listen 80 default_server;
-			listen [::]:80 default_server;
-			add_header X-Served-By $hostname;
-	
-			root /var/www/html;
-			index index.html;
+file {'update nginx file':
+	ensure  => 'link',
+	path    => '/etc/nginx/sites-enabled/default',
+	content => @(EOF)
+server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	add_header X-Served-By $hostname;
 
-			server_name _;
+	root /var/www/html;
+	index index.html;
 
-			location /hbnb_static {
-				alias /data/web_static/current;
-				index index.html;
-			}
+	server_name _;
 
-			location = /redirect {
-			return 301 https://www.alxafrica.com;
-			}
-
-			error_page 404 /error.html;
-			location /404 {
-			internal;
-			error_page 404 /error.html;
-			}
-		}",
-
-	} ->
-	
-	service {'nginx':
-		ensure     => 'running',
-	} ->
-	
-	exec {'restart nginx':
-		provider => 'shell',
-		command  => 'sudo service nginx restart',
+	location /hbnb_static {
+		alias /data/web_static/current;
+		index index.html;
 	}
+
+	location = /redirect {
+		return 301 https://www.alxafrica.com;
+	}
+
+	error_page 404 /error.html;
+	location /404 {
+		internal;
+		error_page 404 /error.html;
+	}
+}
+EOF
+} ->
+	
+service {'nginx':
+	ensure  => 'running',
+} ->
+	
+exec {'restart nginx':
+	provider => 'shell',
+	command  => 'sudo service nginx restart',
+}
