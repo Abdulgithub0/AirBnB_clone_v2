@@ -31,13 +31,15 @@ class BaseModel:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             # storage.new(self) this got cancelled out --> by task 6
-        else:
-            for  key in kwargs.keys():
+        if kwargs:
+            update_dict = {}
+            for  key, val in kwargs.items():
                 if key in  ("updated_at", "created_at"):
-                    kwargs[key] = datetime.strptime(kwargs[key],
+                    update_dict[key] = datetime.strptime(kwargs[key],
                                                     '%Y-%m-%dT%H:%M:%S.%f')
-                elif key == "__class__":
-                    del kwargs[key]
+                elif key != "__class__":
+                    update_dict[key] = val
+            kwargs.update(update_dict)
             if not("id" in kwargs.keys()):
                 kwargs.update({"updated_at": datetime.now()})
                 kwargs.update({"created_at": datetime.now()})
