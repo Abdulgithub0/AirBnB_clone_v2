@@ -19,7 +19,8 @@ app = Flask(__name__)
 
 # bind a specific different url to the following views
 @app.route("/python/<text>", strict_slashes=False)
-def python_view(text):
+@app.route("/python", strict_slashes=False)
+def python_view(text: str = "is cool"):
     """Display 'Python' followed by the value of the text variable"""
     return "Python {}".format(escape(text).replace('_', ' '))
 
