@@ -7,14 +7,14 @@ from sqlalchemy.orm import relationship
 from models.user import User
 
 # declaring table in sqlalchemy expression syntax to represent many-many
-metadata = Base.metadata
+
 
 if (getenv("HBNB_TYPE_STORAGE") == "db"):
+    metadata = Base.metadata
     place_amenity = Table("place_amenity", metadata,
                         Column("place_id", String(60), ForeignKey("places.id"), nullable=False, primary_key=True),
                         Column("amenity_id", String(60), ForeignKey("amenities.id"), primary_key=True, nullable=False)
             )
-
 
 
 class Place(BaseModel, Base):
