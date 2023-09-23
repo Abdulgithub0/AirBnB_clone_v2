@@ -4,9 +4,11 @@ from models.base_model import BaseModel, Base
 from os import getenv
 from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
+from models.user import User
 
 # declaring table in sqlalchemy expression syntax to represent many-many
 metadata = Base.metadata
+
 if (getenv("HBNB_TYPE_STORAGE") == "db"):
     place_amenity = Table("place_amenity", metadata,
                         Column("place_id", String(60), ForeignKey("places.id"), nullable=False, primary_key=True),
@@ -17,8 +19,9 @@ if (getenv("HBNB_TYPE_STORAGE") == "db"):
 
 class Place(BaseModel, Base):
     """ A place to stay for ever """
+    __tablename__ = "places"
     if (getenv("HBNB_TYPE_STORAGE") == "db"):
-        __tablename__ = "places"
+        # __tablename__ = "places"
         city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
         user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
         name = Column(String(128), nullable=False)

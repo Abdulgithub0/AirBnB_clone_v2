@@ -20,8 +20,7 @@ if (getenv("HBNB_TYPE_STORAGE") == "db"):
     db = getenv("HBNB_MYSQL_DB")
     h = getenv("HBNB_MYSQL_HOST") + ":3306"
     ser = "mysql+mysqldb"
-else:
-    return
+
 
 
 classes = (City, State, User, Place, Review, Amenity, place_amenity)
@@ -36,7 +35,7 @@ class DBStorage:
         self.__engine = create_engine(f"{ser}://{u}:{p}@{h}/{db}",
                                       pool_pre_ping=True)
         # mapping all subclasses of Base to their respective tables
-        Base.metadata.create_all(self.__engine)
+        # Base.metadata.create_all(self.__engine)
         if (u == "test"):
             Base.metadata.drop_all(self.__engine)
         
@@ -79,6 +78,7 @@ class DBStorage:
 
     def reload(self):
         """create/get all previously tables in the database"""
+        # Base.metadata.create_all(self.__engine)
         self.__session = scoped_session(sessionmaker(bind=self.__engine))
         Base.metadata.create_all(self.__engine)
     

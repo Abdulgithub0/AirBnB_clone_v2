@@ -8,9 +8,9 @@ from models.state import State
 
 class City(BaseModel, Base):
     """ The city class, contains state ID and name """
+    __tablename__ = "cities"
     if getenv("HBNB_TYPE_STORAGE") == "db":
         # mapping class City to it responding cities table in db storage engine
-        __tablename__ = "cities"
         name = Column(String(128), nullable=False)
         state_id = Column(String(60), ForeignKey("states.id"), nullable=False)
         state = relationship("State", back_populates="cities", cascade="all, delete")
