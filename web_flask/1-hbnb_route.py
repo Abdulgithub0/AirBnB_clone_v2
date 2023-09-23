@@ -6,14 +6,19 @@ Routes:
     /: display “Hello HBNB!”
     /hbnb: display "HBNB"
 """
-from flask import Flask
+from flask import Flask, request
 
 # create an instance of class Flask
 app = Flask(__name__)
 
 
-# bind a specific url to the view hello function
+# bind a specific url to the views: hello and hello_root
 @app.route("/hbnb", strict_slashes=False)
+def hello():
+    """Return an html page with body containing HBNB"""
+    return "HBNB"
+
+
 @app.route("/", strict_slashes=False)
 def hello_root():
     """Return an html page with body containing hello HBNB"""
