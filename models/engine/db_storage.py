@@ -35,7 +35,7 @@ class DBStorage:
     def __init__(self):
         self.__engine = create_engine(f"{ser}://{u}:{p}@{h}/{db}",
                                       pool_pre_ping=True)
-        # mapping all subclasses of Base to their resective tables
+        # mapping all subclasses of Base to their respective tables
         Base.metadata.create_all(self.__engine)
         if (u == "test"):
             Base.metadata.drop_all(self.__engine)
@@ -75,8 +75,15 @@ class DBStorage:
         """delete from the current database session obj if not None"""
         if (obj):
             self.__session.delete(obj)
+            self.__session.flush()
 
     def reload(self):
         """create/get all previously tables in the database"""
         self.__session = scoped_session(sessionmaker(bind=self.__engine))
         Base.metadata.create_all(self.__engine)
+    
+
+    def close(self):
+        """close session"""
+        self.__session.commit()
+        self.__session.close()
