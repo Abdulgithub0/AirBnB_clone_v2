@@ -24,6 +24,7 @@ class State(BaseModel, Base):
             with state_id equals to current state.id
             """
             from models import storage
+            from models.city import City
             # calling the storage.all() to query out all City instances in file.json
             all_cities = storage.all(City)
             cities = []
