@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 # bind a specific url to the view hello function
 @app.route("/", strict_slashes=False)
-def hello():
+def hello_root():
     """Return an html page with body containing hello HBNB"""
     return "Hello HBNB!"
 
