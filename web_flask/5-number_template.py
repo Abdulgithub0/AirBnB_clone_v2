@@ -10,6 +10,8 @@ Routes:
     /python/<text>: display “Python ”, followed by the value of
         the text variable
     /number/<n>: display “n is a number” only if n is an integer
+    /number_template/<n>: display a HTML page only if n is an integer:
+        H1 tag: “Number: n” inside the tag BODY
 """
 from flask import Flask, render_template
 from markupsafe import escape
@@ -19,11 +21,16 @@ app = Flask(__name__)
 
 
 # bind a specific different url to the following views
+@app.route("/number_template/<int:n>", strict_slashes=False)
+def number_template_view(n):
+    return render_template("5-number.html", number=n)
+
+
 @app.route("/number/<int:n>", strict_slashes=False)
 def number_view(n):
     """display 'n is a number'"""
     if n and type(n) is int:
-        return render_template("5-number.html", number=n)
+        return f"{n} is a number"
 
 
 @app.route("/python/<text>", strict_slashes=False)
