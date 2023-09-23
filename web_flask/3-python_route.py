@@ -7,6 +7,8 @@ Routes:
     /hbnb: display "HBNB"
     /c/<text>: display “C ” followed by the value of the text
         variable (replace underscore _ symbols with a space)
+    /python/<text>: display “Python ”, followed by the value of
+        the text variable
 """
 from flask import Flask
 from markupsafe import escape
@@ -16,6 +18,12 @@ app = Flask(__name__)
 
 
 # bind a specific different url to the following views
+@app.route("/python/<text>", strict_slashes=False)
+def python_view(text):
+    """Display 'Python' followed by the value of the text variable"""
+    return "Python {}".format(escape(text).replace('_', ' '))
+
+
 @app.route("/c/<text>", strict_slashes=False)
 def c_view(text):
     """display 'C' followed by the value of the text variable"""
