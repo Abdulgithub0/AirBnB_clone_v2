@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 # bind a specific different url to the following views
 @app.route("/c/<text>", strict_slashes=False)
-def c_view():
+def c_view(text):
     """display 'C' followed by the value of the text variable"""
     return "C {}".format(text.replace("_", " "))
 
