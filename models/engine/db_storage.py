@@ -47,10 +47,10 @@ class DBStorage:
         """return  all objs in current database session"""
 
         objects = {}
-        if not (cls) and cls in classes: # check if cls exist and in list of classes or return every instances in db
+        if cls and cls in classes: # check if cls exist and in list of classes or return every instances in db
             rows = self.__session.query(cls).all() # get all instances of the Class
             for row in rows:
-                key = f'{type(row).__name__}.{row["id"]}' # create the key reference to each instance
+                key = f'{type(row).__name__}.{row.id}' # create the key reference to each instance
                 objects[key] = row
             return objects
         for cl in classes:

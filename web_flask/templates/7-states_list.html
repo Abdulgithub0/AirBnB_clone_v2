@@ -6,7 +6,8 @@
     <BODY>
         <H1>States</H1>
         <UL>
-	{% for key, val in States.items()|sort(attribute="name") %}
+	{% set sorted = States.items()|sort(attribute="1.name") %}
+	{% for key, val in sorted %}
 		{% if val.name %}
 			<LI>{{ val.id }}: <B>{{ val.name }}</B></LI>
 		{% endif %}
