@@ -9,12 +9,13 @@
 	{% set sorted = States.items()|sort(attribute="1.name") %}
 	{% for key, val in sorted %}
 		{% if val.name %}
-			<LI>{{ val.id }}: <B>{{ val.name }}</B></LI>
-			<UL>
-			{% for v in val.cities|sort(attribute="name") %}
-				<LI>{{ v.id }}: <B>{{ v.name }}</B></LI>
-			{% endfor %}
-			</UL>
+			<LI>{{ val.id }}: <B>{{ val.name }}</B>
+				<UL>
+					{% for v in val.cities|sort(attribute="name") %}
+						<LI>{{ v.id }}: <B>{{ v.name }}</B></LI>
+					{% endfor %}
+				</UL>
+			</LI>
 		{% endif %}
 	{% endfor %}
 	</UL>
