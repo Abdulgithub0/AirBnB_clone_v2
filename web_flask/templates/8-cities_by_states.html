@@ -10,11 +10,11 @@
 	{% for key, val in sorted %}
 		{% if val.name %}
 			<LI>{{ val.id }}: <B>{{ val.name }}</B></LI>
-			{% for k v in all_city.items() %}
-				{% if v.state_id == val.id %}
-					<LI>{{ v.id }}: <B>{{ v.name }}</B></LI>
-				{% endif %}
+			<UL>
+			{% for v in val.cities  %}
+				<LI>{{ v.id }}: <B>{{ v.name }}</B></LI>
 			{% endfor %}
+			</UL>
 		{% endif %}
 	{% endfor %}
 	</UL>

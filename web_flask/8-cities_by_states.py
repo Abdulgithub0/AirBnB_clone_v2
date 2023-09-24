@@ -25,10 +25,8 @@ def cities_by_states_view():
         corresponding State obj in either of the specify storage engine
     """
     from models.state import State
-    from models.city import City
     states = storage.all(State)
-    all_city = storage.all(City)
-    return render_template("7-states_list.html", States=states, all_city=all_city)
+    return render_template("8-cities_by_states.html", States=states)
 
 
 if __name__ == "__main__":
