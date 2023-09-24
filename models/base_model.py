@@ -32,10 +32,10 @@ class BaseModel:
             self.updated_at = datetime.now()
             # storage.new(self) this got cancelled out --> by task 6
         if kwargs:
-            update_dict = {}
+            update_dict = {} # fix dict running time update error
             for  key, val in kwargs.items():
                 if key in  ("updated_at", "created_at"):
-                    update_dict[key] = datetime.strptime(kwargs[key],
+                    update_dict[key] = datetime.strptime(val,
                                                     '%Y-%m-%dT%H:%M:%S.%f')
                 elif key != "__class__":
                     update_dict[key] = val
