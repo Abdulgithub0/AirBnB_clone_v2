@@ -4,9 +4,9 @@
         <TITLE>HBNB</TITLE>
     </HEAD>
     <BODY>
-	{% if search_id %}
+	{% if search_id != "Not" %}
 		{% if States.get(search_id, "no") != "no" %}
-			<H1>States</H1>
+			<H1>States: {{ States }}</H1>
 			<H3>Cities</H3>
 			<UL>
 				{% for city in States.cities|sort(attribute="name") %}

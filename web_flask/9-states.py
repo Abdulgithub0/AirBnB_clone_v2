@@ -20,7 +20,7 @@ def close_session(error=None):
 # implement the logic for state listings
 @app.route("/states", strict_slashes=False)
 @app.route("/states/<id>", strict_slashes=False)
-def states_view(id=None):
+def states_view(id="not"):
     """
         /states
             list or display all instances of State obj with
@@ -33,8 +33,9 @@ def states_view(id=None):
     from models.state import State
     states = storage.all(State)
     if (id):
-        states = dict(filter(lambda x: x[1].id == id, states.items())) 
-    return render_template("8-cities_by_states.html", States=states, search_id=id)
+        states = dict(filter(lambda x: x[1].id == id, states.items()))
+        print(states)
+    return render_template("9-states.html", States=states, search_id=id)
 
 
 
