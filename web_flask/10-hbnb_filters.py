@@ -8,26 +8,28 @@ from flask import Flask, render_template
 from models import storage
 
 # create a class Flask instance
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 
 @app.teardown_appcontext
 def close_session(error=None):
     """close the current open storage session for each request made"""
-    # print("..........connection close...............")
     storage.close()
 
 
 # implement the logic for state listings
-@app.route("/cities_by_states", strict_slashes=False)
-def cities_by_states_view():
+@app.route("/hbnb_filters", strict_slashes=False)
+def hbnb_filters_view():
     """
-        list or display all instances of City obj with
-        corresponding State obj in either of the specify storage engine
+        list or display all instances of State, City and Amenity
+        objs with in either of the specify storage engine
     """
     from models.state import State
+    from models.amenity import Amenity
     states = storage.all(State)
-    return render_template("8-cities_by_states.html", States=states)
+    amenities = storage.all(Amenity)
+    return render_template("10-hbnb_filters.html",
+                           States=states, Amenities=amenities)
 
 
 if __name__ == "__main__":
