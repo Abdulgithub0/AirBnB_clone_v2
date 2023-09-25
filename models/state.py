@@ -8,12 +8,13 @@ from os import getenv
 
 class State(BaseModel, Base):
     """ State class """
-    __tablename__= "states"
     if getenv("HBNB_TYPE_STORAGE") == "db":
         # from models.city import City
         # map State to its db table called states
+        __tablename__ = "states"
         name = Column(String(128), nullable=False)
-        cities = relationship("City", back_populates="state", cascade="all, delete-orphan")
+        cities = relationship("City", back_populates="state",
+                              cascade="all, delete-orphan")
     else:
         name = ""
 
@@ -25,12 +26,12 @@ class State(BaseModel, Base):
             """
             from models import storage
             from models.city import City
-            # calling the storage.all() to query out all City instances in file.json
+            # calling the storage.all() to get all City instans in file.json
             all_cities = storage.all(City)
             cities = []
-            if (all_cities): # check if return value of all() is not an empty dict
+            # check if return value of all() is not an empty dict
+            if (all_cities):
                 v = all_cities.values()
-                # filter out all City instances with state_id attr == this curr State instance id
+                # get all City instances with state_id == curr State instan id
                 cities = list(filter(lambda c: self.id == c.state_id, v))
             return cities
-        

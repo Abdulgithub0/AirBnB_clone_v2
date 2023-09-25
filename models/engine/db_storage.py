@@ -22,8 +22,8 @@ if (getenv("HBNB_TYPE_STORAGE") == "db"):
     ser = "mysql+mysqldb"
 
 
-
 classes = (City, State, User, Place, Review, Amenity, place_amenity)
+
 
 class DBStorage:
     """contain all attrs and methods definition for db storage type"""
@@ -38,7 +38,7 @@ class DBStorage:
         # Base.metadata.create_all(self.__engine)
         if (u == "test"):
             Base.metadata.drop_all(self.__engine)
-        
+
         # Opening communication interface btw db engine and mysql server
         Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
         self.__session = Session()
@@ -47,10 +47,13 @@ class DBStorage:
         """return  all objs in current database session"""
 
         objects = {}
-        if cls and cls in classes: # check if cls exist and in list of classes or return every instances in db
-            rows = self.__session.query(cls).all() # get all instances of the Class
+        # if cls exist and in list of classes or return every instances in db
+        if cls and cls in classes:
+            # get all instances of the Class
+            rows = self.__session.query(cls).all()
             for row in rows:
-                key = f'{type(row).__name__}.{row.id}' # create the key reference to each instance
+                # create the key reference to each instance
+                key = f'{type(row).__name__}.{row.id}'
                 objects[key] = row
             return objects
         for cl in classes:
@@ -80,8 +83,7 @@ class DBStorage:
         """create/get all previously tables in the database"""
         Base.metadata.create_all(self.__engine)
         self.__session = scoped_session(sessionmaker(bind=self.__engine))
-        #Base.metadata.create_all(self.__engine)
-    
+        # Base.metadata.create_all(self.__engine)
 
     def close(self):
         """close session"""
